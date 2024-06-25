@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Sender</title>
+</head>
+<body>
+    <div class="main">   
+    <h2>Send Message</h2>
+    <p>Enter your message below and click the "Send" button to send it to the receiver.</p>
+    </div>
+    <input type="text" id="messageInput" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        let ws;
+
+        function connect() {
+            ws = new WebSocket('ws://localhost:6789');
+
+            ws.onopen = function() {
+                console.log('Connection opened');
+            };
+
+            ws.onclose = function() {
+                console.log('WebSocket connection closed');
+            };
+        }
+
+        function sendMessage() {
+            const message = document.getElementById('messageInput').value;
+            ws.send(message);
+            document.getElementById('messageInput').value = ''; // Clear input after sending
+        }
+
+        window.onload = connect;
+    </script>
+</body>
+</html>

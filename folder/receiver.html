@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Receiver</title>
+    <style>
+        #chatbox {
+            border: 1px solid #aaa;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h2>Chat Messages</h2>
+    <div id="chatbox"></div>
+
+    <script>
+        const chatbox = document.getElementById('chatbox');
+
+        function connect() {
+            const ws = new WebSocket('ws://localhost:6789');
+
+            ws.onmessage = function(event) {
+                displayMessage(event.data);
+            };
+
+            ws.onclose = function() {
+                console.log('WebSocket connection closed');
+                displayMessage('<em>Disconnected.</em>');
+            };
+        }
+
+        function displayMessage(message) {
+            const p = document.createElement('p');
+            p.innerHTML = message;
+            chatbox.appendChild(p);
+            // Scroll to the bottom of the chat box
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        window.onload = connect;
+    </script>
+</body>
+</html>
